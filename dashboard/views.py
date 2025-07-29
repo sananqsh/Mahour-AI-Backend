@@ -1,7 +1,11 @@
+import json
+import logging
 from datetime import datetime
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from llm_caller.services import call_llm
 
 # Create your views here.
 class DashboardView(APIView):
@@ -85,3 +89,16 @@ class InboxView(APIView):
                 'read_flag': True
             }
         ])
+
+
+class ChatView(APIView):
+    def post(self, request):
+        request_json = json.loads(request.body)
+        logging.info(request_json)
+        llm_response_message = call_llm(
+            request_json.get('message'),
+            "I'm a customer and you are an assistant for a customer club. Greet me and answer. "
+        )
+
+        # TODO: Add conversation_id to response
+        return Response({"message": llm_response_message})

@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'accounts',
+    'llm_caller',
+    'dashboard'
 ]
 
 MIDDLEWARE = [

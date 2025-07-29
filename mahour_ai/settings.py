@@ -68,8 +68,47 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # LLM / OpenAI settings
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+OPENAI_API_URL = os.getenv('OPENAI_API_URL') if os.getenv('OPENAI_API_KEY') else 'https://api.gapapi.com/v1'
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY') or os.getenv('GAPGPT_API_KEY')
 PROMPT_TEMPLATE = os.getenv(
     'PROMPT_TEMPLATE',
     default="You are a helpful assistant. {user_prompt}"
 )
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'llm_caller': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}

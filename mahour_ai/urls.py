@@ -3,4 +3,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/llm/', include('llm_caller.urls')),
 ]

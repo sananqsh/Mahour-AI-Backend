@@ -10,6 +10,7 @@ class Product(models.Model):
     category = models.CharField(max_length=100)
 
 class Order(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     total = models.FloatField()
     date = models.DateField()
     items = models.ManyToManyField(Product)

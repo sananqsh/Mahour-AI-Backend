@@ -5,10 +5,15 @@ from datetime import datetime
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from accounts.models import CustomUser
+from dashboard.models import Order
+from dashboard.serializers import DashboardSerializer, OrderSerializer
 from llm_caller.services import call_llm
 
 # Create your views here.
 class DashboardView(APIView):
+    serializer_class = DashboardSerializer
+
     def get(self, request):
         return Response({
             'totalOrders': 3,
@@ -25,40 +30,12 @@ class DashboardView(APIView):
 
 
 class OrdersView(APIView):
+    serializer_class = OrderSerializer
     def get(self, request):
-        return Response([
-            {
-                'id': 1,
-                'date': datetime.now(),
-                'created_at': datetime.now(),
-                'items': [
-                    {
-                        'product_id': 1,
-                        'quantity': 1,
-                        'price': 100,
-                    },
-                    {
-                        'product_id': 2,
-                        'quantity': 2,
-                        'price': 20,
-                    }
-                ],
-                'total': 140,
-            },
-            {
-                'id': 2,
-                'date': datetime.now(),
-                'created_at': datetime.now(),
-                'items': [
-                    {
-                        'product_id': 3,
-                        'quantity': 1,
-                        'price': 50,
-                    }
-                ],
-                'total': 50,
-            }
-        ])
+        user = CustomUser.objects.last()
+        orders = Order.objects.filter(user=user)
+        orders_serializer = OrderSerializer(orders, many=True)
+        return Response(orders_serializer.data)
 
 
 class InboxView(APIView):

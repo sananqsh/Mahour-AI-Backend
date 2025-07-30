@@ -1,7 +1,7 @@
 import json
 import logging
-from datetime import datetime
 
+from django.db import models
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -15,18 +15,19 @@ class DashboardView(APIView):
     serializer_class = DashboardSerializer
 
     def get(self, request):
-        return Response({
-            'totalOrders': 3,
-            'totalSpent': 100,
-            'points': 2000,
-            'tier': 'Gold',
-            'user': {
-                'id': 1,
-                'name': 'San',
-                'tier': 'Gold',
-                'points': 200
-            },
+        # TODO: get request.user
+        user = CustomUser.objects.first()
+        orders = Order.objects.filter(user=user)
+        total_orders = orders.count()
+        total_spent = orders.aggregate(models.Sum('total'))['total__sum']
+        serializer = self.serializer_class({
+            'totalOrders': total_orders,
+            'totalSpent': total_spent,
+            'points': user.points,
+            'tier': user.tier,
+            'user': user
         })
+        return Response(serializer.data)
 
 
 class OrdersView(APIView):

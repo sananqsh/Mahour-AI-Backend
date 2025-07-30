@@ -4,24 +4,17 @@ from .models import *
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
     class Meta:
         model = CustomUser
+        fields = ('id', 'email', 'name', 'points', 'tier')
+
+    def get_name(self, obj):
+        return obj.get_name()
 
 class DashboardSerializer(serializers.Serializer):
-    # {
-    #     'totalOrders': 3,
-    #     'totalSpent': 100,
-    #     'points': 2000,
-    #     'tier': 'Gold',
-    #     'user': {
-    #         'id': 1,
-    #         'name': 'San',
-    #         'tier': 'Gold',
-    #         'points': 200
-    #     },
-    # }
     totalOrders = serializers.IntegerField()
-    totalSpend = serializers.IntegerField()
+    totalSpent = serializers.IntegerField()
     points = serializers.IntegerField()
     tier = serializers.CharField()
     user = CustomerSerializer()

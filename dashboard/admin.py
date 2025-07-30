@@ -4,16 +4,16 @@ from .models import *
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('user', 'total', 'date')
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("name", "price", "category")
 
 @admin.register(Inbox)
 class InboxAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("user",)
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("inbox", "title", "date", "read_flag")

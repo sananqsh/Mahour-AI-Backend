@@ -16,12 +16,13 @@ class Order(models.Model):
     items = models.ManyToManyField(Product)
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
         self.total = self.items.aggregate(total=Sum('price'))['total']
+        super().save(*args, **kwargs)
 
 class Inbox(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    class Meta:
+        verbose_name_plural = "Inboxes"
 
 class Message(models.Model):
     inbox = models.ForeignKey(Inbox, on_delete=models.CASCADE)

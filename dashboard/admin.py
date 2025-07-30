@@ -6,6 +6,9 @@ from .models import *
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('user', 'total', 'date')
 
+    def total(self, obj):
+        return obj.get_total()
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ("name", "price", "category")

@@ -19,7 +19,9 @@ class DashboardView(APIView):
         user = CustomUser.objects.first()
         orders = Order.objects.filter(user=user)
         total_orders = orders.count()
-        total_spent = orders.aggregate(models.Sum('total'))['total__sum']
+        total_spent = 0
+        for order in orders:
+            total_spent += order.get_total()
         serializer = self.serializer_class({
             'totalOrders': total_orders,
             'totalSpent': total_spent,

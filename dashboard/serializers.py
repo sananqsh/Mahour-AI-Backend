@@ -20,9 +20,13 @@ class DashboardSerializer(serializers.Serializer):
     user = CustomerSerializer()
 
 class OrderSerializer(serializers.ModelSerializer):
+    total = serializers.SerializerMethodField()
     class Meta:
         model = Order
         fields = '__all__'
+
+    def get_total(self, obj):
+        return obj.get_total()
 
 class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:

@@ -11,13 +11,11 @@ class Product(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    total = models.FloatField()
     date = models.DateField()
     items = models.ManyToManyField(Product)
 
-    def save(self, *args, **kwargs):
-        self.total = self.items.aggregate(total=Sum('price'))['total']
-        super().save(*args, **kwargs)
+    def get_total(self, *args, **kwargs):
+        return self.items.aggregate(total=Sum('price'))['total']
 
 class Inbox(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)

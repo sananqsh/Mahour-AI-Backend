@@ -68,6 +68,7 @@ DATABASES = {
 }
 
 AUTH_PASSWORD_VALIDATORS = []
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'

@@ -1,7 +1,7 @@
 import json
 import logging
 
-from django.db import models
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -10,9 +10,9 @@ from dashboard.models import Order
 from dashboard.serializers import DashboardSerializer, OrderSerializer
 from llm_caller.services import call_llm
 
-# Create your views here.
 class DashboardView(APIView):
     serializer_class = DashboardSerializer
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         # TODO: get request.user
@@ -31,17 +31,17 @@ class DashboardView(APIView):
         })
         return Response(serializer.data)
 
-
 class OrdersView(APIView):
     serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         user = CustomUser.objects.last()
         orders = Order.objects.filter(user=user)
         orders_serializer = OrderSerializer(orders, many=True)
         return Response(orders_serializer.data)
 
-
 class InboxView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         return Response([
             {
@@ -70,8 +70,8 @@ class InboxView(APIView):
             }
         ])
 
-
 class ChatView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         request_json = json.loads(request.body)
         logging.info(request_json)

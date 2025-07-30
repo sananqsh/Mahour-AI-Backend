@@ -1,3 +1,4 @@
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,6 +10,8 @@ from .services import call_llm
 logger = logging.getLogger(__name__)
 
 class ChatAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
     """
     POST /api/chat/
     {

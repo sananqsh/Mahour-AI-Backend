@@ -3,7 +3,7 @@ from django.conf import settings
 
 api_url=settings.OPENAI_API_URL
 api_key = settings.OPENAI_API_KEY
-client = OpenAI(base_url='https://api.gapgpt.app/v1', api_key=api_key)
+client = OpenAI(base_url=api_url, api_key=api_key)
 
 def call_llm(user_prompt: str, prompt_template: str | None = None):
     """

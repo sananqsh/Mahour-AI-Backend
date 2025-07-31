@@ -105,7 +105,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # LLM / OpenAI settings
-OPENAI_API_URL = os.getenv('OPENAI_API_URL') if os.getenv('OPENAI_API_KEY') else 'https://api.gapapi.com/v1'
+OPENAI_API_URL = os.getenv('OPENAI_API_URL') or os.getenv('GAPGPT_API_URL')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY') or os.getenv('GAPGPT_API_KEY')
 PROMPT_TEMPLATE = os.getenv(
     'PROMPT_TEMPLATE',

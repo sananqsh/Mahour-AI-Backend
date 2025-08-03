@@ -10,7 +10,7 @@ def call_llm(
     prompt_template: str | None = None,
     history: list[dict] | None = None,
     context: str | None = None,
-):
+) -> str:
     """
     Formats user prompt with prompt_template alongside history and context
     and calls the OpenAI ChatCompletion API. Returns the assistant's reply.
@@ -21,7 +21,7 @@ def call_llm(
         messages = messages + history
 
         user_prompt = formatted_user_prompt(user_prompt, prompt_template)
-        messages.append({"role": "user", "message": user_prompt})
+        messages.append({"role": "user", "content": user_prompt})
 
         response = client.chat.completions.create(
             model="gpt-4o",
@@ -33,7 +33,7 @@ def call_llm(
     except Exception as e:
         print(e)
 
-def formatted_user_prompt(user_prompt, prompt_template: str | None = None):
+def formatted_user_prompt(user_prompt, prompt_template: str | None = None) -> str:
     if prompt_template is None:
         return user_prompt
 

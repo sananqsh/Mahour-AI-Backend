@@ -60,4 +60,4 @@ class ChatView(APIView):
             context=initial_context,
         )
 
-        return Response({"message": llm_response_message})
+        return Response({"content": llm_response_message})

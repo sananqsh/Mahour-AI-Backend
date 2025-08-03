@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from dashboard.models import Order, Inbox
 from dashboard.serializers import DashboardSerializer, OrderSerializer, InboxSerializer
+from dashboard.llm_utils import get_initial_context
 from llm_caller.services import call_llm
 
 
@@ -52,12 +53,11 @@ class ChatView(APIView):
     def post(self, request):
         request_json = json.loads(request.body)
 
+        initial_context = get_initial_context(request.user)
         llm_response_message = call_llm(
             user_prompt=request_json.get('message'),
             history=request_json.get('history'),
-            user_context={
-                "username": request.user.get_name()
-            }
+            context=initial_context,
         )
 
         return Response({"message": llm_response_message})

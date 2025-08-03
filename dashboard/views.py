@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from dashboard.models import Order, Inbox
 from dashboard.serializers import DashboardSerializer, OrderSerializer, InboxSerializer
 from dashboard.llm_utils import get_initial_context
+from llm_caller.exceptions import OpenAIRequestException
 from llm_caller.services import call_llm
 
 
@@ -53,11 +54,15 @@ class ChatView(APIView):
     def post(self, request):
         request_json = json.loads(request.body)
 
-        initial_context = get_initial_context(request.user)
-        llm_response_message = call_llm(
+        try:
+            initial_context = get_initial_context(request.user)
+            llm_response_message = call_llm(
             user_prompt=request_json.get('message'),
             history=request_json.get('history'),
             context=initial_context,
-        )
+            )
+        except OpenAIRequestException as e:
+            print("e")
+            return Response({"message": "There was an error with the request; please try again later."})
 
         return Response({"content": llm_response_message})

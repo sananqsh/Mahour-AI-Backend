@@ -1,6 +1,8 @@
 from openai import OpenAI
 from django.conf import settings
 
+from llm_caller.exceptions import OpenAIRequestException
+
 api_url=settings.OPENAI_API_URL
 api_key = settings.OPENAI_API_KEY
 client = OpenAI(base_url='https://api.gapgpt.app/v1', api_key=api_key)
@@ -31,7 +33,7 @@ def call_llm(
         )
         return response.choices[0].message.content
     except Exception as e:
-        print(e)
+        raise OpenAIRequestException(e)
 
 def formatted_user_prompt(user_prompt, prompt_template: str | None = None) -> str:
     if prompt_template is None:

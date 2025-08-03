@@ -9,3 +9,7 @@ class ChatSerializer(serializers.Serializer):
         allow_blank=True,
         help_text='Optional template using "{user_prompt}" to interpolate.'
     )
+    history = serializers.JSONField(
+        required=False,
+        help_text='The text you want to send to the LLM.'
+    )

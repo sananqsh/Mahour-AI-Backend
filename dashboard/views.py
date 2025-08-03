@@ -5,10 +5,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from accounts.models import CustomUser
 from dashboard.models import Order, Inbox
 from dashboard.serializers import DashboardSerializer, OrderSerializer, InboxSerializer
 from llm_caller.services import call_llm
+
 
 class DashboardView(APIView):
     serializer_class = DashboardSerializer
@@ -51,11 +51,13 @@ class ChatView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         request_json = json.loads(request.body)
-        logging.info(request_json)
+
         llm_response_message = call_llm(
-            request_json.get('message'),
-            "I'm a customer and you are called Mahour AI, an assistant for a customer club. Greet me and answer. "
+            user_prompt=request_json.get('message'),
+            history=request_json.get('history'),
+            user_context={
+                "username": request.user.get_name()
+            }
         )
 
-        # TODO: Add conversation_id to response
         return Response({"message": llm_response_message})

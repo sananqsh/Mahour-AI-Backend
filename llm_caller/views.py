@@ -21,10 +21,11 @@ class ChatAPIView(APIView):
         serializer.is_valid(raise_exception=True)
 
         user_prompt = serializer.validated_data['user_prompt']
+        history = serializer.validated_data.get('history')
         prompt_template = serializer.validated_data.get('prompt_template')
 
         try:
-            llm_response = call_llm(user_prompt, prompt_template)
+            llm_response = call_llm(user_prompt, prompt_template, history)
         except Exception as e:
             return Response(
                 {"error": str(e)},

@@ -107,9 +107,10 @@ STATIC_URL = 'static/'
 # LLM / OpenAI settings
 OPENAI_API_URL = os.getenv('OPENAI_API_URL') or os.getenv('GAPGPT_API_URL')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY') or os.getenv('GAPGPT_API_KEY')
-PROMPT_TEMPLATE = os.getenv(
-    'PROMPT_TEMPLATE',
-    default="You are a helpful assistant. {user_prompt}"
+INITIAL_LLM_CONTEXT = os.getenv(
+    'INITIAL_LLM_CONTEXT',
+    default="You are Mahour AI, an assistant for the Mahour Customer Club in a customer chat support. "
+        "Answer user questions, suggest products based on their purchase history, and greet them warmly."
 )
 
 # Logging configuration
